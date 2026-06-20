@@ -11,7 +11,7 @@
     "48": "assets/icon48.png",
     "128": "assets/icon128.png"
   },
-  "permissions": ["storage", "activeTab", "scripting", "nativeMessaging"],
+  "permissions": ["storage", "nativeMessaging"],
   "host_permissions": [
     "https://*.upwork.com/*",
     "https://*.freelancer.com/*"
