@@ -1,0 +1,147 @@
+name: Release Extension
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - extension/manifest.json
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing git tag to publish, for example extension-v1.0.0 (leave empty to release current manifest version)
+        required: false
+        type: string
+
+concurrency:
+  group: release-extension
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  release-extension:
+    name: Build Extension Release
+    runs-on: ubuntu-latest
+    # Exposed so the Chrome Web Store step can self-skip until secrets are set
+    # (`secrets` is not available in a step `if`, but `env` is).
+    env:
+      CWS_EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release metadata
+        id: release-meta
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            tag="${{ github.event.inputs.tag }}"
+            if [[ -z "$tag" ]]; then
+              version=$(node -p "require('./extension/manifest.json').version")
+              tag="extension-v$version"
+            fi
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+            echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          current_version=$(node -p "require('./extension/manifest.json').version")
+          previous_sha="${{ github.event.before }}"
+          previous_version=''
+
+          if [[ "$previous_sha" != "0000000000000000000000000000000000000000" ]] && git cat-file -e "$previous_sha:extension/manifest.json" 2>/dev/null; then
+            previous_version=$(git show "$previous_sha:extension/manifest.json" | node -e "const fs=require('node:fs'); process.stdout.write(JSON.parse(fs.readFileSync(0, 'utf8')).version)")
+          fi
+
+          if [[ "$current_version" == "$previous_version" ]]; then
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+            echo "release_tag=" >> "$GITHUB_OUTPUT"
+            echo "Extension version unchanged ($current_version); skipping release."
+            exit 0
+          fi
+
+          echo "should_release=true" >> "$GITHUB_OUTPUT"
+          echo "release_tag=extension-v$current_version" >> "$GITHUB_OUTPUT"
+
+      - name: Check out requested tag
+        if: github.event_name == 'workflow_dispatch' && steps.release-meta.outputs.should_release == 'true' && github.event.inputs.tag != ''
+        run: |
+          git fetch --tags origin
+          git checkout "${{ steps.release-meta.outputs.release_tag }}"
+
+      - name: Set up Node.js
+        if: steps.release-meta.outputs.should_release == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build packaged extension zip
+        if: steps.release-meta.outputs.should_release == 'true'
+        run: ./package.sh
+
+      - name: Publish GitHub release assets
+        if: steps.release-meta.outputs.should_release == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.release-meta.outputs.release_tag }}
+          name: ${{ steps.release-meta.outputs.release_tag }}
+          target_commitish: ${{ github.sha }}
+          generate_release_notes: true
+          files: |
+            dist/bid-pilot-*.zip
+
+      - name: Prune older extension releases
+        if: steps.release-meta.outputs.should_release == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prefix = 'extension-v';
+
+            const releases = await github.paginate(github.rest.repos.listReleases, {
+              owner,
+              repo,
+              per_page: 100,
+            });
+
+            const extensionReleases = releases
+              .filter((release) => release.tag_name?.startsWith(prefix) && !release.draft)
+              .sort((left, right) => {
+                const leftDate = new Date(left.published_at ?? left.created_at ?? 0).getTime();
+                const rightDate = new Date(right.published_at ?? right.created_at ?? 0).getTime();
+                return rightDate - leftDate;
+              });
+
+            for (const release of extensionReleases.slice(3)) {
+              core.info(`Deleting old extension release ${release.tag_name}`);
+              await github.rest.repos.deleteRelease({ owner, repo, release_id: release.id });
+              try {
+                await github.rest.git.deleteRef({ owner, repo, ref: `tags/${release.tag_name}` });
+              } catch (error) {
+                if (error.status !== 404 && error.status !== 422) throw error;
+                core.warning(`Tag ${release.tag_name} was already missing while pruning releases.`);
+              }
+            }
+
+      - name: Publish to Chrome Web Store
+        # Self-skips until the CWS_* secrets are set, so the GitHub-release flow above
+        # is never blocked by Chrome Web Store credentials. Placed last on purpose:
+        # the GitHub release is already published before this runs. --auto-publish
+        # pushes to the item's current visibility (set it to Unlisted in the
+        # Developer Dashboard for a private track, or Public to go live).
+        if: steps.release-meta.outputs.should_release == 'true' && env.CWS_EXTENSION_ID != ''
+        env:
+          EXTENSION_ID: ${{ secrets.CWS_EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+        run: |
+          zip=$(ls dist/bid-pilot-*.zip)
+          npx --yes chrome-webstore-upload-cli@3 upload --source "$zip" --auto-publish
