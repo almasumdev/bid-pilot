@@ -79,7 +79,7 @@ export function buildUserPrompt({ job, profile, style, tone, examples, customIns
   lines.push('');
 
   if (customInstructions && customInstructions.trim()) {
-    lines.push('# Custom instructions from the freelancer — follow these closely, they override defaults:');
+    lines.push('# Extra instructions from the freelancer (apply these IN ADDITION to all the rules above; where they conflict, follow the freelancer):');
     lines.push(customInstructions.trim());
     lines.push('');
   }

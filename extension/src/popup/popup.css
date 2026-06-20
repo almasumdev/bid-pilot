@@ -129,5 +129,6 @@ select {
 .primary:active { transform: translateY(1px); }
 .saved { color: #0a8f78; font-size: 12px; font-weight: 600; }
 
+.hint { margin: 2px 0 0; color: #9aa2ae; font-size: 11px; line-height: 1.45; }
 .note { margin: 14px 16px 0; color: #9aa2ae; font-size: 11px; line-height: 1.5; }
 code { background: #eef1f4; padding: 1px 5px; border-radius: 5px; color: #3a4250; }
