@@ -1,7 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Bid Pilot",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "minimum_chrome_version": "110",
+  "author": "Nurullah Al Masum",
+  "homepage_url": "https://github.com/almasumdev/bid-pilot",
   "description": "Generate tailored freelance job proposals on Upwork & Freelancer using your local Claude CLI. You always review & insert manually.",
   "icons": {
     "16": "assets/icon16.png",

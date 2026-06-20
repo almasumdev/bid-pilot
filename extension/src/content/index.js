@@ -41,13 +41,17 @@
     generate(BP.panel.style);
   }
 
+  let generating = false;
+
   async function generate(style) {
+    if (generating) return; // ignore overlapping clicks / rapid style switches
     const job = BP.scrapeJob();
     if (!job || (!job.description && !job.title)) {
       BP.panel.setError('Could not read the job post on this page.');
       return;
     }
     lastJob = job;
+    generating = true;
     BP.panel.setLoading(true);
     try {
       const resp = await sendMessage({ type: 'GENERATE', job, style });
@@ -59,6 +63,7 @@
     } catch (e) {
       BP.panel.setError(String(e.message || e));
     } finally {
+      generating = false;
       BP.panel.setLoading(false);
     }
   }

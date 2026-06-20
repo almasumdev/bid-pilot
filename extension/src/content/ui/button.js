@@ -10,10 +10,16 @@
     btn.id = 'bp-fab';
     btn.type = 'button';
     btn.className = 'bp-fab';
-    // Logo rendered white via CSS mask so it reads on the teal button.
-    btn.innerHTML =
-      `<span class="bp-fab-logo" style="-webkit-mask-image:url('${logo}');mask-image:url('${logo}')"></span>` +
-      `<span class="bp-fab-label">Generate Proposal</span>`;
+    // Build via DOM + CSSOM (not an inline style attribute) so strict page CSP
+    // (style-src without 'unsafe-inline') can't strip the mask.
+    const ico = document.createElement('span');
+    ico.className = 'bp-fab-logo';
+    ico.style.webkitMaskImage = `url("${logo}")`;
+    ico.style.maskImage = `url("${logo}")`;
+    const lbl = document.createElement('span');
+    lbl.className = 'bp-fab-label';
+    lbl.textContent = 'Generate Proposal';
+    btn.append(ico, lbl);
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       onClick();
