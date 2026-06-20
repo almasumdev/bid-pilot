@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="setup.css" />
+  <title>Bid Pilot — Setup</title>
+</head>
+<body>
+  <header class="hd">
+    <div class="brand"><img class="logo" src="../assets/icon128.png" alt="" /> Bid Pilot</div>
+    <span class="ver" id="ver"></span>
+  </header>
+
+  <main>
+    <h1>Finish setup</h1>
+    <p class="lead">Bid Pilot drafts proposals through the <b>Claude CLI on your computer</b>, so there is no API key and nothing is billed per use. Browsers don't let an extension install that bridge by itself, so this one step links them. Takes about 20 seconds.</p>
+
+    <div class="status" id="status">
+      <span class="dot" id="dot"></span>
+      <span id="statusText">Checking connection…</span>
+    </div>
+
+    <ol class="steps" id="steps">
+      <li class="step" id="s-pre">
+        <h3>Before you start</h3>
+        <p>You need <a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> and the <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code CLI</a> installed and logged in. Quick check in a terminal: <code>echo hi | claude -p</code> should print a reply.</p>
+      </li>
+
+      <li class="step" id="s-dl">
+        <h3>1 · Download the installer</h3>
+        <p>One file, pre-filled with this extension's ID. It installs the bridge into every browser it finds.</p>
+        <button id="download" class="primary" type="button">Download installer</button>
+        <span class="hint" id="dlHint"></span>
+      </li>
+
+      <li class="step" id="s-run">
+        <h3>2 · Run it once</h3>
+        <p>Open a terminal and paste this:</p>
+        <div class="cmd">
+          <code id="cmd">bash ~/Downloads/bidpilot-install.sh</code>
+          <button id="copy" class="ghost" type="button">Copy</button>
+        </div>
+        <p class="hint">Reads as one line. It writes the bridge to your home folder and registers it with your browsers. Safe to re-run.</p>
+      </li>
+
+      <li class="step" id="s-done">
+        <h3>3 · You're done</h3>
+        <p>This page turns green automatically once it connects. If it doesn't within a few seconds, fully quit and reopen your browser.</p>
+        <button id="recheck" class="ghost" type="button">Check now</button>
+      </li>
+    </ol>
+
+    <details class="adv">
+      <summary>Why a terminal step?</summary>
+      <p>Browser security forbids an extension from writing native-messaging files to disk. The downloaded script does exactly that one job: it drops a small Node host and registers it so the extension can talk to your local <code>claude</code> CLI. Nothing leaves your machine.</p>
+    </details>
+  </main>
+
+  <script type="module" src="setup.js"></script>
+</body>
+</html>

@@ -20,6 +20,10 @@ fi
 mkdir -p "${DIST}"
 rm -f "${OUT}"
 
+# Keep the bundled host copy (used by the in-browser installer) in sync with the
+# canonical native-host source.
+cp "${ROOT}/native-host/host.js" "${EXT}/setup/host.js"
+
 # Zip the contents of extension/ (so the manifest sits at the archive root),
 # excluding OS cruft.
 ( cd "${EXT}" && zip -rq "${OUT}" . -x '*.DS_Store' '*/.*' )

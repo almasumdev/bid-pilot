@@ -56,4 +56,9 @@ document.getElementById('test').addEventListener('click', () => {
   });
 });
 
+document.getElementById('openSetup').addEventListener('click', (e) => {
+  e.preventDefault();
+  chrome.runtime.openOptionsPage();
+});
+
 load();

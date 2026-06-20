@@ -67,20 +67,23 @@ per-token billing** — generations are covered by your existing Claude subscrip
 1. Open `chrome://extensions` (or `brave://extensions`)
 2. Enable **Developer mode**
 3. **Load unpacked** → select the `extension/` folder
-4. Copy the **extension ID** shown on the card
 
-### 2 · Install the native host
+### 2 · Run the guided setup (mostly in the browser)
 
-From the repo root:
+A **setup page opens automatically** on install (or reopen it from the popup →
+"Setup / fix connection"). It:
 
-```bash
-./native-host/install.sh <EXTENSION_ID> [chrome|chromium|brave]
-```
+1. **Download installer** — one file, pre-filled with this extension's ID
+2. **Run it once** — paste `bash ~/Downloads/bidpilot-install.sh` into a terminal
+3. The page **turns green automatically** when connected
 
-This generates a launcher with absolute paths to `node` and `claude` (so it works
-even when the browser is launched from the GUI) and registers the messaging host.
+> Browsers don't allow an extension to install a native-messaging bridge itself
+> (security), so that single downloaded command is the one unavoidable step. It
+> drops a small Node host into `~/.bidpilot` and registers it with every
+> Chromium-based browser it finds — no repo, no manual IDs, safe to re-run.
 
-5. **Fully quit and reopen** the browser.
+**Advanced / scripted:** the repo also ships `native-host/install.sh <EXTENSION_ID>
+[chrome|chromium|brave]` if you prefer to install from the source tree directly.
 
 ### 3 · Configure
 

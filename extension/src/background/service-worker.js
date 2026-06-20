@@ -8,6 +8,13 @@ import { getSettings } from '../shared/storage.js';
 import { buildSystemPrompt, buildUserPrompt } from '../shared/prompts.js';
 import { generate, ping } from './nativeClient.js';
 
+// Open the in-browser setup page automatically on first install.
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === 'install') {
+    chrome.tabs.create({ url: chrome.runtime.getURL('setup/setup.html') });
+  }
+});
+
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
   if (!msg || !msg.type) return;
 
