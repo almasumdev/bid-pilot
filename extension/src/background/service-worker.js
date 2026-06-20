@@ -73,9 +73,12 @@ function parseProposal(raw, style) {
   return { style, text: humanize(text), suggestedBid: null, deliveryDays: null, suggestedBidRange: null, skillsToMention: [] };
 }
 
-// Strip the characters that scream "AI wrote this" so the bid reads as typed by a person.
+const MAX_CHARS = 1000;
+
+// Strip the characters that scream "AI wrote this" so the bid reads as typed by a
+// person, then enforce the hard length cap.
 function humanize(s) {
-  return String(s || '')
+  const cleaned = String(s || '')
     .replace(/\s*[—–]\s*/g, ', ')   // em/en dash used as punctuation -> comma
     .replace(/[—–]/g, '-')          // any remaining dash -> plain hyphen
     .replace(/[“”]/g, '"')          // smart double quotes -> straight
@@ -84,6 +87,27 @@ function humanize(s) {
     .replace(/ /g, ' ')        // non-breaking space -> normal space
     .replace(/[ \t]+\n/g, '\n')     // trailing spaces
     .trim();
+  return capLength(cleaned, MAX_CHARS);
+}
+
+// Guarantee the proposal never exceeds the limit. Trims the body at a sentence
+// boundary while preserving a "Regards, <name>" sign-off if present.
+function capLength(text, max) {
+  if (text.length <= max) return text;
+  const m = text.match(/\n+regards,[\s\S]*$/i);
+  const signoff = m ? text.slice(m.index).trim() : '';
+  let body = m ? text.slice(0, m.index).trim() : text;
+  const budget = max - (signoff ? signoff.length + 2 : 0);
+  if (body.length > budget) {
+    body = body.slice(0, budget);
+    const cut = Math.max(
+      body.lastIndexOf('. '), body.lastIndexOf('.\n'),
+      body.lastIndexOf('! '), body.lastIndexOf('? '), body.lastIndexOf('\n')
+    );
+    if (cut > budget * 0.5) body = body.slice(0, cut + 1);
+    body = body.trim();
+  }
+  return signoff ? body + '\n\n' + signoff : body;
 }
 
 function numOrNull(v) {

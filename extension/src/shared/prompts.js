@@ -21,7 +21,7 @@ export function buildSystemPrompt() {
     'DELIVERY: Give a specific timeline and a concrete first step. Do not over-promise. Never use vague pricing language like "competitive rate".',
     'PROOF: Reference at most one tightly matched example, framed by the outcome. No link dumps.',
     'CLOSE: End the body with one confident, specific next step or a single sharp question about their project.',
-    'LENGTH: Usually 150-300 words. Longer is fine for complex development jobs. Tighten ruthlessly; every line earns its place.',
+    'LENGTH: HARD LIMIT - the entire proposal text, including the Regards sign-off, must be at most 1000 characters (roughly 150-170 words). Stay under it. Tighten ruthlessly; every line earns its place. Cut adjectives before you cut substance.',
     '',
     '# Sound completely human (critical)',
     'Write the way a sharp freelancer actually types. Plain, direct, specific.',
