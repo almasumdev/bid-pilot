@@ -49,6 +49,15 @@
       const budgetEl = first(['.ProjectViewDetails-budget', '.BudgetLabel', '[class*="budget" i]']);
       const budget = text(budgetEl);
 
+      const locEl = first([
+        '.PageProjectViewLogout-employerLocation',
+        'fl-location',
+        '[class*="employerLocation" i]',
+        '.ProjectViewDetailsEmployer [class*="location" i]',
+        '[data-location]',
+      ]);
+      const clientLocation = text(locEl);
+
       return {
         platform: 'freelancer',
         url: location.href,
@@ -57,6 +66,7 @@
         skills: Array.from(new Set(skills)),
         budget,
         currency: BP.detectCurrency(budget),
+        clientLocation,
       };
     },
 

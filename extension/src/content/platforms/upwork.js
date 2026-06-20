@@ -51,6 +51,15 @@
       ]);
       const budget = text(budgetEl);
 
+      const locEl = first([
+        '[data-test="client-location"] strong',
+        '[data-qa="client-location"]',
+        'li[data-test="LocationLabel"] strong',
+        '[data-test="LocationLabel"]',
+        '[data-test="client-location"]',
+      ]);
+      const clientLocation = text(locEl);
+
       return {
         platform: 'upwork',
         url: location.href,
@@ -59,6 +68,7 @@
         skills: Array.from(new Set(skills)),
         budget,
         currency: BP.detectCurrency(budget) || 'USD',
+        clientLocation,
       };
     },
 

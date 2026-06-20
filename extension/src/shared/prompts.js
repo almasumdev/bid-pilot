@@ -62,6 +62,10 @@ export function buildUserPrompt({ job, profile, style, tone, examples, customIns
   if (job.skills && job.skills.length) lines.push('Required skills: ' + job.skills.join(', '));
   if (job.budget) lines.push('Client budget: ' + job.budget);
   if (job.currency) lines.push('Project currency: ' + job.currency + ' — suggestedBid MUST be a number in ' + job.currency + ', within the client budget. Do NOT convert to USD.');
+  if (job.clientLocation) {
+    lines.push('Client location: ' + job.clientLocation);
+    lines.push('Use the client location ONLY to: (a) match their English variant/spelling (US vs UK/AU), and (b) optionally note natural working-hours/timezone overlap in one short phrase if it fits. NEVER change pricing based on location, never mention their country explicitly unless it reads naturally, and never assume anything about their budget, quality, or professionalism from where they are.');
+  }
   lines.push('Description:');
   lines.push(job.description || '(none extracted)');
   lines.push('');
