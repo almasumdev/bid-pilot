@@ -21,9 +21,9 @@
     hostMatch: (url) => /(^|\.)freelancer\.[a-z.]+$/.test(new URL(url).hostname),
 
     isJobPage() {
-      const u = location.pathname;
-      const onProject = /\/projects?\//.test(u);
-      return onProject || !!this.insertTarget() || !!first(['.ProjectDescription', '.ViewHeaderContent-title']);
+      // Only on Freelancer project pages, e.g.
+      // /projects/app-development/Some-Project/details
+      return /\/projects\//.test(location.pathname);
     },
 
     scrape() {
