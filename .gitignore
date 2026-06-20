@@ -1,0 +1,18 @@
+# Generated per-machine by native-host/install.sh (contains absolute local paths)
+native-host/host-launcher.sh
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Logs
+*.log
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/

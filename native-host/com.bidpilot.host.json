@@ -1,0 +1,9 @@
+{
+  "name": "com.bidpilot.host",
+  "description": "Bid Pilot native host (bridges extension to local claude CLI)",
+  "path": "__HOST_PATH__",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://__EXTENSION_ID__/"
+  ]
+}

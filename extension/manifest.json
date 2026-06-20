@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "Bid Pilot",
+  "version": "0.1.0",
+  "description": "Generate tailored freelance job proposals on Upwork & Freelancer using your local Claude CLI. You always review & insert manually.",
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  },
+  "permissions": ["storage", "activeTab", "scripting", "nativeMessaging"],
+  "host_permissions": [
+    "https://*.upwork.com/*",
+    "https://*.freelancer.com/*"
+  ],
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Bid Pilot settings",
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "assets/icon16.png",
+      "48": "assets/icon48.png",
+      "128": "assets/icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.upwork.com/*",
+        "https://*.freelancer.com/*"
+      ],
+      "js": [
+        "src/content/platforms/upwork.js",
+        "src/content/platforms/freelancer.js",
+        "src/content/platforms/index.js",
+        "src/content/scrape.js",
+        "src/content/insert.js",
+        "src/content/ui/button.js",
+        "src/content/ui/panel.js",
+        "src/content/index.js"
+      ],
+      "css": ["src/content/ui/panel.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

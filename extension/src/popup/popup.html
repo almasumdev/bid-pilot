@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="popup.css" />
+  <title>Bid Pilot</title>
+</head>
+<body>
+  <header class="hd">
+    <div class="brand"><span class="spark">✦</span> Bid Pilot</div>
+    <button id="test" class="ghost" type="button">Test connection</button>
+  </header>
+  <div id="conn" class="conn"></div>
+
+  <form id="form">
+    <section class="card">
+      <h2>Your profile</h2>
+      <label class="fld">Name<input name="name" type="text" autocomplete="off" placeholder="Your name" /></label>
+      <label class="fld">Title<input name="title" type="text" placeholder="e.g. Full-stack developer" /></label>
+      <label class="fld">Skills<input name="skills" type="text" placeholder="React, Node, Postgres…" /></label>
+      <label class="fld">Experience<textarea name="experience" rows="3" placeholder="1-2 sentences about your background"></textarea></label>
+    </section>
+
+    <section class="card">
+      <h2>Generation</h2>
+      <span class="lbl">Default style</span>
+      <div class="seg">
+        <input type="radio" name="defaultStyle" id="st-short" value="short" />
+        <label for="st-short">Short</label>
+        <input type="radio" name="defaultStyle" id="st-pro" value="professional" />
+        <label for="st-pro">Professional</label>
+        <input type="radio" name="defaultStyle" id="st-pers" value="persuasive" />
+        <label for="st-pers">Persuasive</label>
+      </div>
+
+      <label class="fld">Tone <span class="opt">optional</span><input name="tone" type="text" placeholder="e.g. warm, direct" /></label>
+      <label class="fld">Model <span class="opt">optional</span>
+        <select name="model">
+          <option value="">CLI default</option>
+          <option value="claude-opus-4-8">Opus 4.8 — highest quality</option>
+          <option value="claude-sonnet-4-6">Sonnet 4.6 — balanced</option>
+          <option value="claude-haiku-4-5-20251001">Haiku 4.5 — fastest</option>
+          <option value="claude-fable-5">Fable 5</option>
+        </select>
+      </label>
+      <label class="fld">Custom instructions <span class="opt">optional</span>
+        <textarea name="customInstructions" rows="3" placeholder="Standing rules for every proposal — e.g. always open with a question, mention my 24h reply time, never use the word 'leverage'"></textarea>
+      </label>
+      <label class="fld">Past winning proposals <span class="opt">optional</span>
+        <textarea name="examples" rows="4" placeholder="Paste 1-2 proposals that won work — Bid Pilot matches your voice"></textarea>
+      </label>
+    </section>
+
+    <div class="bar">
+      <button id="save" class="primary" type="submit">Save settings</button>
+      <span id="saved" class="saved"></span>
+    </div>
+  </form>
+
+  <p class="note">Runs on your local <code>claude</code> CLI via a native host. No API key, no auto-submit.</p>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
