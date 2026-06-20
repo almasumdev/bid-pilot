@@ -9,6 +9,13 @@
 Drafts tailored cover letters, suggests a bid amount and delivery time in the
 project's own currency, and fills the form for you to review. It never submits.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Manifest V3](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)
+![No API key](https://img.shields.io/badge/API%20key-none-success)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+
+<img src="store/screenshot-1280x800.png" alt="Bid Pilot generating a proposal on a job page" width="720" />
+
 </div>
 
 ---
@@ -121,6 +128,7 @@ extension/
     background/           service worker + native messaging client
     popup/                settings UI
     shared/               storage + prompt building
+  setup/                  in-browser guided installer (auto-opens on install)
 native-host/
   host.js                 reads stdin frames, runs the claude CLI
   com.bidpilot.host.json  native messaging manifest (template)
@@ -136,6 +144,14 @@ no browser:
 ```bash
 node native-host/integration-test.mjs
 ```
+
+## Contributing
+
+Contributions are welcome — fixing platform selectors when Upwork/Freelancer
+change their markup, adding new platforms, or improving the prompt. The
+extension loads unpacked with **no build step**. See
+**[CONTRIBUTING.md](CONTRIBUTING.md)** for setup, architecture, and how to add a
+platform adapter.
 
 ## Safety
 
