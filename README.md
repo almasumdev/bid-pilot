@@ -40,19 +40,9 @@ per-token billing** — generations are covered by your existing Claude subscrip
 
 ## How it works
 
-```
- Browser (extension)                                   Your machine
- ┌───────────────────────────────┐                     ┌──────────────────────────┐
- │ content scripts (job page)    │                     │ host-launcher.sh         │
- │   detect → scrape → panel UI  │                     │   (resolves node + PATH) │
- │        │ insert ▲             │                     │        │                 │
- │        ▼        │             │                     │        ▼                 │
- │ background service worker ────┼──── native msg ────▶│ host.js ── spawn ──▶ claude CLI
- │   builds the prompt   ◀───────┼──── JSON ───────────┤   (your subscription)    │
- │        ▲                      │                     └──────────────────────────┘
- │ popup (settings)              │
- └───────────────────────────────┘
-```
+<div align="center">
+  <img src="store/how-it-works.svg" alt="Bid Pilot data flow: the browser extension detects and scrapes a job page, the background worker builds a prompt, a local native host spawns the Claude CLI, and the draft returns to a panel you edit and insert." width="820" />
+</div>
 
 1. A content script detects a job page and injects the **Generate Proposal** button.
 2. On click it scrapes the title, description, skills, budget and currency — **only on demand**.

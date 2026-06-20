@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" role="img" aria-label="How Bid Pilot works: the browser extension scrapes a job page and builds a prompt, a local native host runs the Claude CLI, and the draft returns to a panel you edit and insert.">
+  <style>
+    .box   { fill:#ffffff; stroke:#d0d7de; }
+    .group { fill:none; stroke:#d0d7de; stroke-dasharray:4 4; }
+    .title { fill:#1f2328; font-weight:600; }
+    .sub   { fill:#636c76; }
+    .glabel{ fill:#636c76; font-weight:600; letter-spacing:.5px; }
+    .flow  { stroke:#4285F4; fill:none; }
+    .flowl { fill:#4285F4; font-weight:600; }
+    .ret   { stroke:#2da44e; fill:none; stroke-dasharray:5 4; }
+    .retl  { fill:#2da44e; font-weight:600; }
+    @media (prefers-color-scheme: dark) {
+      .box   { fill:#161b22; stroke:#30363d; }
+      .group { stroke:#30363d; }
+      .title { fill:#e6edf3; }
+      .sub   { fill:#8b949e; }
+      .glabel{ fill:#8b949e; }
+      .flow  { stroke:#58a6ff; }
+      .flowl { fill:#58a6ff; }
+      .ret   { stroke:#3fb950; }
+      .retl  { fill:#3fb950; }
+    }
+  </style>
+  <defs>
+    <marker id="ah" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" class="flow" stroke="none" fill="#4285F4"/>
+    </marker>
+    <marker id="ahd" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" stroke="none" fill="#2da44e"/>
+    </marker>
+  </defs>
+
+  <!-- group labels -->
+  <text x="146" y="42" text-anchor="middle" font-size="13" class="glabel">IN YOUR BROWSER</text>
+  <text x="676" y="42" text-anchor="middle" font-size="13" class="glabel">ON YOUR MACHINE</text>
+  <rect x="36"  y="56" width="380" height="118" rx="12" class="group"/>
+  <rect x="504" y="56" width="380" height="118" rx="12" class="group"/>
+
+  <!-- boxes -->
+  <g>
+    <rect x="56"  y="84" width="160" height="64" rx="10" class="box"/>
+    <text x="136" y="112" text-anchor="middle" font-size="15" class="title">Job page</text>
+    <text x="136" y="132" text-anchor="middle" font-size="12" class="sub">detect + scrape</text>
+  </g>
+  <g>
+    <rect x="256" y="84" width="160" height="64" rx="10" class="box"/>
+    <text x="336" y="112" text-anchor="middle" font-size="15" class="title">Background</text>
+    <text x="336" y="132" text-anchor="middle" font-size="12" class="sub">build prompt</text>
+  </g>
+  <g>
+    <rect x="524" y="84" width="160" height="64" rx="10" class="box"/>
+    <text x="604" y="112" text-anchor="middle" font-size="15" class="title">Native host</text>
+    <text x="604" y="132" text-anchor="middle" font-size="12" class="sub">host.js</text>
+  </g>
+  <g>
+    <rect x="724" y="84" width="160" height="64" rx="10" class="box"/>
+    <text x="804" y="112" text-anchor="middle" font-size="15" class="title">Claude CLI</text>
+    <text x="804" y="132" text-anchor="middle" font-size="12" class="sub">your subscription</text>
+  </g>
+
+  <!-- forward flow -->
+  <line x1="216" y1="116" x2="252" y2="116" class="flow" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="234" y="104" text-anchor="middle" font-size="11" class="flowl">job</text>
+
+  <line x1="416" y1="116" x2="520" y2="116" class="flow" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="468" y="104" text-anchor="middle" font-size="11" class="flowl">native msg</text>
+
+  <line x1="684" y1="116" x2="720" y2="116" class="flow" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="702" y="104" text-anchor="middle" font-size="11" class="flowl">spawn</text>
+
+  <!-- return path: Claude CLI -> down -> back -> up into Background -->
+  <path d="M804,148 L804,236 L336,236 L336,150" class="ret" stroke-width="2" marker-end="url(#ahd)"/>
+  <text x="570" y="228" text-anchor="middle" font-size="12" class="retl">draft (JSON) returns to the panel — you edit, then Insert (never auto-submits)</text>
+
+  <text x="460" y="294" text-anchor="middle" font-size="12" class="sub">No API key · no servers · no network calls from the extension — auth lives in your local claude login</text>
+</svg>
