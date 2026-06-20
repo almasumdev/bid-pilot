@@ -5,11 +5,15 @@
 
   BP.mountButton = function mountButton(onClick) {
     if (document.getElementById('bp-fab')) return;
+    const logo = chrome.runtime.getURL('assets/icon128.png');
     const btn = document.createElement('button');
     btn.id = 'bp-fab';
     btn.type = 'button';
     btn.className = 'bp-fab';
-    btn.textContent = '✦ Generate Proposal';
+    // Logo rendered white via CSS mask so it reads on the teal button.
+    btn.innerHTML =
+      `<span class="bp-fab-logo" style="-webkit-mask-image:url('${logo}');mask-image:url('${logo}')"></span>` +
+      `<span class="bp-fab-label">Generate Proposal</span>`;
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       onClick();

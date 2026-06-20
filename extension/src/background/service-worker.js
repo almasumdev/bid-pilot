@@ -63,14 +63,27 @@ function parseProposal(raw, style) {
     return {
       // Style is the user's choice — never trust the model to echo it back correctly.
       style,
-      text: typeof json.text === 'string' ? json.text : text,
+      text: humanize(typeof json.text === 'string' ? json.text : text),
       suggestedBid: numOrNull(json.suggestedBid),
       deliveryDays: numOrNull(json.deliveryDays),
       suggestedBidRange: json.suggestedBidRange || null,
       skillsToMention: Array.isArray(json.skillsToMention) ? json.skillsToMention : [],
     };
   }
-  return { style, text, suggestedBid: null, deliveryDays: null, suggestedBidRange: null, skillsToMention: [] };
+  return { style, text: humanize(text), suggestedBid: null, deliveryDays: null, suggestedBidRange: null, skillsToMention: [] };
+}
+
+// Strip the characters that scream "AI wrote this" so the bid reads as typed by a person.
+function humanize(s) {
+  return String(s || '')
+    .replace(/\s*[—–]\s*/g, ', ')   // em/en dash used as punctuation -> comma
+    .replace(/[—–]/g, '-')          // any remaining dash -> plain hyphen
+    .replace(/[“”]/g, '"')          // smart double quotes -> straight
+    .replace(/[‘’]/g, "'")          // smart single quotes/apostrophes -> straight
+    .replace(/…/g, '...')           // ellipsis char -> three dots
+    .replace(/ /g, ' ')        // non-breaking space -> normal space
+    .replace(/[ \t]+\n/g, '\n')     // trailing spaces
+    .trim();
 }
 
 function numOrNull(v) {

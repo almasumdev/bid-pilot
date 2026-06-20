@@ -17,9 +17,10 @@
     root = document.createElement('div');
     root.id = 'bp-root';
     root.className = 'bp-root bp-hidden';
+    const logoUrl = chrome.runtime.getURL('assets/icon128.png');
     root.innerHTML = `
       <div class="bp-header">
-        <div class="bp-brand"><span class="bp-spark">✦</span> Bid Pilot</div>
+        <div class="bp-brand"><img class="bp-logo" src="${logoUrl}" alt="" /> Bid Pilot</div>
         <button class="bp-x" type="button" aria-label="Close">×</button>
       </div>
 

@@ -22,6 +22,16 @@
 }
 .bp-fab:hover { transform: translateY(-2px) !important; box-shadow: 0 12px 28px rgba(14, 156, 132, 0.5) !important; }
 .bp-fab:active { transform: translateY(0) !important; }
+.bp-fab-logo {
+  width: 18px !important; height: 18px !important;
+  display: inline-block !important;
+  background: #ffffff !important;            /* logo painted white via mask */
+  -webkit-mask-repeat: no-repeat !important; mask-repeat: no-repeat !important;
+  -webkit-mask-position: center !important; mask-position: center !important;
+  -webkit-mask-size: contain !important; mask-size: contain !important;
+  flex: 0 0 auto !important;
+}
+.bp-fab-label { display: inline-block !important; }
 
 .bp-root {
   position: fixed !important;
@@ -55,7 +65,7 @@
   color: #fff !important;
 }
 .bp-brand { display: inline-flex !important; align-items: center !important; gap: 8px !important; font-weight: 700 !important; font-size: 14px !important; letter-spacing: .2px !important; }
-.bp-spark { color: #2fe0b0 !important; font-size: 15px !important; }
+.bp-logo { width: 20px !important; height: 20px !important; object-fit: contain !important; display: block !important; flex: 0 0 auto !important; }
 .bp-x {
   width: 28px !important; height: 28px !important;
   display: grid !important; place-items: center !important;
