@@ -17,7 +17,8 @@
     root = document.createElement('div');
     root.id = 'bp-root';
     root.className = 'bp-root bp-hidden';
-    const logoUrl = chrome.runtime.getURL('assets/icon128.png');
+    let logoUrl = '';
+    try { if (chrome.runtime && chrome.runtime.id) logoUrl = chrome.runtime.getURL('assets/icon128.png'); } catch (_) {}
     root.innerHTML = `
       <div class="bp-header">
         <div class="bp-brand"><img class="bp-logo" src="${logoUrl}" alt="" /> Bid Pilot</div>

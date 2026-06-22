@@ -43,8 +43,16 @@
 
   let generating = false;
 
+  function contextAlive() {
+    return !!(chrome.runtime && chrome.runtime.id);
+  }
+
   async function generate(style) {
     if (generating) return; // ignore overlapping clicks / rapid style switches
+    if (!contextAlive()) {
+      BP.panel.setError('Bid Pilot was updated. Reload this page to reconnect.');
+      return;
+    }
     const job = BP.scrapeJob();
     if (!job || (!job.description && !job.title)) {
       BP.panel.setError('Could not read the job post on this page.');
@@ -95,6 +103,9 @@
   // SPA-aware: re-check on URL changes (Upwork/Freelancer are single-page apps).
   let lastUrl = location.href;
   function watch() {
+    // Extension was reloaded/updated — this stale content script is dead. Stop
+    // observing so we don't churn or throw on every DOM mutation.
+    if (!contextAlive()) { mo.disconnect(); return; }
     if (location.href !== lastUrl) {
       lastUrl = location.href;
       ensureButton();

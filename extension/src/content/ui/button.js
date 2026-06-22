@@ -5,7 +5,8 @@
 
   BP.mountButton = function mountButton(onClick) {
     if (document.getElementById('bp-fab')) return;
-    const logo = chrome.runtime.getURL('assets/icon128.png');
+    let logo = '';
+    try { if (chrome.runtime && chrome.runtime.id) logo = chrome.runtime.getURL('assets/icon128.png'); } catch (_) {}
     const btn = document.createElement('button');
     btn.id = 'bp-fab';
     btn.type = 'button';
