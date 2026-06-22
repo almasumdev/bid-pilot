@@ -21,6 +21,7 @@ export function buildSystemPrompt() {
     'BODY: Name their actual pain point. Show light pre-work — a quick diagnosis or a clear hypothesis about their problem (never offer full free work). Back it with one or two specific, relevant past results, only if supported by the profile. Do not list many unrelated skills.',
     'DELIVERY: Give a specific timeline and a concrete first step. Do not over-promise. Never use vague pricing language like "competitive rate". The timeline you state in the text MUST match deliveryDays.',
     'PROOF: Reference at most one tightly matched example, framed by the outcome. No link dumps.',
+    'PORTFOLIO MATCH: If the freelancer\'s profile or extra instructions list specific apps, products, or projects they have built, and one of them closely matches this job\'s domain or requirements, name that single most relevant one as concrete proof (briefly, framed by what it does or the result it got). Choose only the best match; never force an unrelated one, never list several, and never invent an app that is not listed. If nothing listed genuinely fits, mention no specific app.',
     'CLOSE: End the body with one confident, specific next step or a single sharp question about their project.',
     'LENGTH: HARD LIMIT - the entire proposal text, including the Regards sign-off, must be at most 1000 characters (roughly 150-170 words). Stay under it. Tighten ruthlessly; every line earns its place. Cut adjectives before you cut substance.',
     '',
@@ -92,7 +93,7 @@ export function buildUserPrompt({ job, profile, style, tone, examples, customIns
   lines.push('');
 
   if (customInstructions && customInstructions.trim()) {
-    lines.push('# Extra instructions from the freelancer (apply these IN ADDITION to all the rules above; where they conflict, follow the freelancer):');
+    lines.push('# Extra instructions from the freelancer (apply these IN ADDITION to all the rules above; where they conflict, follow the freelancer). These may include a list of apps/products/projects the freelancer has built — treat that as their portfolio and apply the PORTFOLIO MATCH rule: cite the single best-matching one as proof only when it genuinely fits this job:');
     lines.push(customInstructions.trim());
     lines.push('');
   }
